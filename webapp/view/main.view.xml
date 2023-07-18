@@ -1,0 +1,82 @@
+<mvc:View controllerName="projverrun.controller.main" 
+xmlns:mvc="sap.ui.core.mvc" displayBlock="true" 
+xmlns="sap.m" 
+xmlns:semantic="sap.f.semantic"
+xmlns:table="sap.ui.table"
+xmlns:form="sap.ui.layout.form" 
+xmlns:core="sap.ui.core">
+     <semantic:SemanticPage id="page" headerPinnable="true" toggleHeaderOnTitleClick="false">
+   <semantic:titleHeading>
+			<Title text="{i18n>title}" id="stitle"/>
+		</semantic:titleHeading>
+    <semantic:headerContent>
+        <form:SimpleForm id="sftitle" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" 
+        labelSpanM="4" labelSpanS="12" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" 
+        singleContainerFullSize="false" ariaLabelledBy="Title1">
+             <form:content>
+                <Label text="Verion List" id="verList" />
+                <ComboBox id="verlistc" required="true" items="{
+					path: '/version_listSet',templateShareable:false,
+          events:{dataRequested:'.onUsageTypeRequested',dataReceived:'.onUsageTypeReceived'},
+    			sorter: { path: 'VersionName' }
+				}">
+                    <core:Item key="{VersionName}" text="{VersionDescr}" id="verlisti" />
+                </ComboBox>
+                <Label id="lbl1_btn" />
+                <Button id="prsbutton" text="Process Version" width="50%" press="onPress" />
+            </form:content> 
+        </form:SimpleForm> 
+        </semantic:headerContent> 
+         <semantic:content>
+      <Table
+            id="table"
+            width="auto"
+            sticky="HeaderToolbar,InfoToolbar,ColumnHeaders"
+            items="{ path: '/prcdverlistSet', sorter: { path: 'ChgDate', descending: true } }"
+            noDataText="{worklistView>/tableNoDataText}"
+            growing="true"
+            busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+            growingScrollToLoad="true"
+            updateFinished="onUpdateFinished"
+            class="altrowcolor withGrid"
+            busy="true">        
+					<headerToolbar >
+          <Toolbar id="idhtoolbar" height="3rem">
+						<Title id="tableHeader" text="Processed Versions"/>	
+            </Toolbar>					
+				</headerToolbar>				
+            <columns>
+                <Column id="vName">
+                    <Text text="Version Name" id="vNameColumnTitle" />
+                </Column>
+                <Column id="vDesc">
+                    <Text text="Version Description" id="vDescColumnTitle" />
+                </Column>
+                <Column id="procBy">
+                    <Text text="Processed By" id="pByColumnTitle" />
+                </Column>
+                <Column id="pDate">
+                    <Text text="Processed Date" id="pDateColumnTitle" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="clitem">
+                    <cells>
+                        <Text id="idvname" text="{VersionName}" />
+                        <Text id="idvdesc" text="{VersionDescr}" />
+                        <Text id="idvpby"  text="{ProcessedBy}" />
+                        <Text id="idcdate" text="{
+                          path: 'ChgDate',
+                          type: 'sap.ui.model.type.Date',
+                          formatOptions: { 
+                          pattern : 'dd/MM/yyyy',
+                          UTC : true
+                          } 
+                          }" />
+                    </cells>
+                </ColumnListItem> 
+            </items> 
+        </Table> 
+        </semantic:content> 
+    </semantic:SemanticPage>
+</mvc:View>
